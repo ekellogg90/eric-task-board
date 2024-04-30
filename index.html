@@ -24,7 +24,39 @@
     <div class="text-center mb-5">
       <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#formModal">Add Task</button>
     </div>
+
     <!-- Todo: Create a modal with a form to add tasks -->
+    <div class="modal fade" id="formModal" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Task</h4>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">  <!-- gives x button -->
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="task-form" class="row g-3">
+                        <div class="mb-3 col-md-6">
+                            <input type="text" class="form-control" id="task-title" placeholder="Task Title"/>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <input type="text" class="form-control" id="task-due-date" placeholder="Task Due Date"/>
+                        </div>
+                        <div class="col-12">
+                            <input type="text" class="form-control" id="task-description" placeholder="Task Description"/>
+                        </div>
+
+                        <div class="modal-footer justify-content-center">  <!-- for some reason adding in classes of modal-dialog modal-dialog-centered will center the button, but make it unclickable-->
+                            <input id="submit" type="submit" class="btn btn-success" value="Add Task"></input>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row swim-lanes text-center justify-content-between">
       <div class="col-12 col-lg-4 d-flex">
         <div id="to-do" class="card border-light mb-3 lane flex-grow-1">
@@ -66,7 +98,6 @@
   <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.3/dayjs.min.js"
     integrity="sha256-iu/zLUB+QgISXBLCW/mcDi/rnf4m4uEDO0wauy76x7U=" crossorigin="anonymous"></script>
-
   <script src="./assets/js/script.js"></script>
 </body>
 
