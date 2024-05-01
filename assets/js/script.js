@@ -4,7 +4,6 @@ const taskDueDateEl = $('#task-due-date');
 const taskDescriptionEl = $('#task-description');
 
 // Retrieve tasks and nextId from localStorage
-
 function readTaskFromStorage() {
     let taskList = JSON.parse(localStorage.getItem("tasks"));
     if (!taskList) {
@@ -13,7 +12,7 @@ function readTaskFromStorage() {
     return taskList;
 }
 
-// xTodo: create a function to generate a unique task id
+// Generate a unique task id
 function readNextIdFromStorage() {
     let nextId = JSON.parse(localStorage.getItem("nextId"));
     if (!nextId) {
@@ -55,10 +54,10 @@ function handleFormSubmit() {
     renderTaskList();
 }
 
-// xTodo: create a function to create a task card
+// Create a task card
 function createTaskCard(task) {
     // New Card
-    const taskCard = $('<div>').addClass('card project-card draggable my-3').attr('data-project-id', task.id); // add in draggable class here?
+    const taskCard = $('<div>').addClass('card task-card draggable my-3').attr('data-task-id', task.id);
     
     // Card Header
     const cardHeader = $('<div>').addClass('card-header h4').text(task.title);
@@ -73,7 +72,7 @@ function createTaskCard(task) {
     const cardDueDate = $('<p>').addClass('card-text').text(task.dueDate);
 
     // Delete button
-    const cardDeleteBtn = $('<button>').addClass('btn btn-danger delete').text('Delete').attr('data-project-id', task.id);
+    const cardDeleteBtn = $('<button>').addClass('btn btn-danger delete').text('Delete').attr('data-task-id', task.id);
     cardDeleteBtn.on('click', handleDeleteTask);
 
     // Card background
@@ -97,7 +96,7 @@ function createTaskCard(task) {
     return taskCard;
 }
 
-// Todo: create a function to render the task list and make cards draggable
+// Render the task list and make cards draggable
 function renderTaskList() {
     const tasks = readTaskFromStorage();
 
@@ -123,13 +122,11 @@ function renderTaskList() {
     $('.draggable').draggable({
         opacity: 0.7,
         zIndex: 100,
-        // ? This is the function that creates the clone of the card that is dragged. This is purely visual and does not affect the data.
         helper: function (e) {
-          // ? Check if the target of the drag event is the card itself or a child element. If it is the card itself, clone it, otherwise find the parent card  that is draggable and clone that.
           const original = $(e.target).hasClass('ui-draggable')
             ? $(e.target)
             : $(e.target).closest('.ui-draggable');
-          // ? Return the clone with the width set to the width of the original card. This is so the clone does not take up the entire width of the lane. This is to also fix a visual bug where the card shrinks as it's dragged to the right.
+          // Return the clone with the width set to the width of the original card
           return original.clone().css({
             width: original.outerWidth(),
           });
@@ -137,18 +134,9 @@ function renderTaskList() {
       });
 }
 
-// Todo: create a function to handle adding a new task
-function handleAddTask(event){
-    // createTaskCard(); // this creates my task card and appends elements to it
-    // renderTaskList(); // this refreshes swim lanes with their cards
-    // handleFormSubmit(); // this sends form data to local storage
-    // readTaskFromStorage(); // this reads the task data from local storage
-
-}
-
-// Todo: create a function to handle deleting a task
+// Handle deleting a task
 function handleDeleteTask(event){
-    const taskId = $(this).attr('data-project-id');
+    const taskId = parseInt($(this).attr('data-task-id'));
     const tasks = readTaskFromStorage();
   
     // Loop through the projects array and remove the project with the matching id.
@@ -162,25 +150,31 @@ function handleDeleteTask(event){
     renderTaskList();
 }
 
-// Todo: create a function to handle dropping a task into a new status lane
-function handleDrop(event, ui) { // 166
+// Handle dropping a task into a new status lane
+function handleDrop(event, ui) {
     const tasks = readTaskFromStorage();
-    const tasksId = ui.draggable[0].dataset.taskId;
+
+    const tasksId = parseInt(ui.draggable[0].dataset.taskId);
     const newStatus = event.target.id;
 
     for (let task of tasks) {
         if (task.id === tasksId) {
             task.status = newStatus;
+            console.log(`task.id ${task.id}`);
+            console.log(`tasksId ${tasksId}`);
         }
     }
     localStorage.setItem('tasks', JSON.stringify(tasks));
     renderTaskList();
+    console.log(tasks);
+    console.log(tasksId);
+    console.log(newStatus);
 }
 
-// xTodo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
+// On page load, render the task list, add event listeners, and make lanes droppable
 $(document).ready(function () {
     renderTaskList();
-
+    // date picker
     $('#task-due-date').datepicker({
         changeMonth: true,
         changeYear: true,
